@@ -63,7 +63,24 @@ public class LoginTests {
         driver.findElement(By.xpath("//span[text()='PIM']")).click();
         assertTrue(driver.getCurrentUrl().contains("pim"));
     }
-
+    @Test
+    public void testLogout() {
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.name("username")));
+            driver.findElement(By.name("username")).sendKeys("Admin");
+            driver.findElement(By.name("password")).sendKeys("admin123");
+            driver.findElement(By.cssSelector("button[type='submit']")).click();
+            wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".oxd-userdropdown")));
+            driver.findElement(By.cssSelector(".oxd-userdropdown")).click();
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='Logout']")));
+            driver.findElement(By.xpath("//a[text()='Logout']")).click();
+            wait.until(ExpectedConditions.urlContains("auth/login"));
+            assertTrue(driver.getCurrentUrl().contains("auth/login"));
+        } catch (Exception e) {
+            System.err.println("Test testLogout failed: " + e.getMessage());
+            throw e;
+        }
+    }
     @After
     public void tearDown() {
         if (driver != null) {
